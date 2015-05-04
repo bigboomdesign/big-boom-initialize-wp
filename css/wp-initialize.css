@@ -1,0 +1,81 @@
+label{
+	color: #ffffff;
+}
+	  	
+#contextual-help-link-wrap{ display: none;}
+#footer-upgrade{display: none;}
+#adminmenu a.menu-top {
+    border-style: solid;
+    border-width: 1px 0;
+    font-weight: bold;
+    /*min-width: 10em;*/
+    padding: 5px;
+}
+
+.hndle, #footer{
+	background-image: url("../images/red.jpg") !important;
+}
+
+#footer-left, #footer-upgrade{
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #ffffff;
+}
+
+h3.hndle span, .postbox h3.hndle span span.postbox-title-action a{
+	color: #ffffff;
+}
+
+.postbox-container .meta-box-sortables .postbox{
+	border: none;
+	background-color: #ffffff;
+}
+
+html body.wp-admin div#wpwrap div#wpcontent div#wpbody div#wpbody-content div.wrap div#dashboard-widgets-wrap div#dashboard-widgets.metabox-holder div.postbox-container div#side-sortables.meta-box-sortables div#dashboard_quick_press.postbox div.inside form#quick-press{
+	padding-bottom: 10px;
+}
+
+.wp-submenu .wp-submenu-wrap ul li{
+	background-color: #ffffff;
+	background-image: url("../images/white.jpg") !important;
+}
+
+ul#adminmenu li.wp-has-submenu a.wp-has-submenu, ul#adminmenu li.menu-top a.menu-top{
+	background-image: url("../images/red.jpg") !important;
+	color: #ffffff;
+}
+
+#adminmenu div.separator{
+	border: none;
+}
+
+#wpwrap{
+	background-color: #FFFFFF;
+	background-image: url("../images/paper.jpg") !important;
+}
+
+
+html {
+	background-color: #FFFFFF;
+	background-image: url("../images/paper.jpg") !important;
+}
+
+
+
+ul#adminmenu li.wp-has-submenu a.wp-has-submenu, ul#adminmenu li.menu-top a.menu-top{
+	background-image: url("../images/red.jpg") !important;
+	color: #ffffff;
+}
+
+label{ 
+	color: #000000;
+}
+
+.wp-editor-container{background: #fff;}
+
+/* MHULL edit */
+.bbd-wrap{ width: 500px; }
+.bbd-red{ color: #B42D29; }
+
+#admin_contact_widget iframe{width: 100%;
+max-width: 550px;}
