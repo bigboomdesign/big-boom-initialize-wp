@@ -4,35 +4,26 @@ Plugin Name: WP Initialize
 Description: Initialize options and sample content for your WordPress site
 Author: Big Boom Design
 Author URI: http://www.bigboomdesign.com
-Version: 0.1.0
+Version: 0.2.0
 */
+
+/* 
+* Main Routine
+*/
+require_once wpinit_dir('/lib/class-wp-init.php');
 
 /* 
 * Back end
 */
 if(is_admin()){
 	# Scripts
-	add_action('admin_enqueue_scripts', 'wpini_admin_enqueue');
-	function wpini_admin_enqueue(){
-		wp_enqueue_style('wp-initialize-css', wpini_url('/css/wp-initialize.css'));	
-		
-		$screen = get_current_screen();
-		if($screen->base == 'tools_page_wp_initialization'){
-			# styles for WP Initialize page go here
-		}
-	}
+	add_action('admin_enqueue_scripts', array('WP_Init','admin_enqueue'));
+
 	# Menu Page under 'Tools'
-	add_action('admin_menu', 'wpini_admin_menu');
-	function wpini_admin_menu(){
-		add_management_page( 'WP Initialize', 'WP Initialize', 'manage_options', 'wp_initialization', 'wpini_initialization_page' );
-	}
-	function wpini_initialization_page(){
-	?>
-		<div class='wrap'>
-			<h2><span class='bbd-red'>Big Boom Design</span> WP Initialize</h2>
-		</div>
-	<?php
-	}
+	add_action('admin_menu', array('WP_Init','admin_menu'));
+
+	# ajax
+	WP_Init_Ajax::add_actions();	
 } # end if: is_admin()
 
 /*
@@ -40,29 +31,29 @@ if(is_admin()){
 */
 else{
 	# Login Screen
-	function wpini_custom_login() { 
-		wp_enqueue_style('wp-initialize-login-css', wpini_url('/custom-login/custom-login.css'));
+	function wpinit_custom_login() { 
+		wp_enqueue_style('wp-initialize-login-css', wpinit_url('/custom-login/custom-login.css'));
 	}
-	add_action('login_head', 'wpini_custom_login');
+	add_action('login_head', 'wpinit_custom_login');
 
 	## URL link for logo
-	function wpini_url_login(){
+	function wpinit_url_login(){
 		return "http://bigboomdesign.com/"; 
 	}
-	add_filter('login_headerurl', 'wpini_url_login');
+	add_filter('login_headerurl', 'wpinit_url_login');
 
 	// changing the alt text on the logo to show your site name 
-	function wpini_login_title() { return "bigboomdesign.com"; }
-	add_filter('login_headertitle', 'wpini_login_title');
+	function wpinit_login_title() { return "bigboomdesign.com"; }
+	add_filter('login_headertitle', 'wpinit_login_title');
 
-	function failed_login() {
+	function wpinit_failed_login() {
 		return 'The login information you have entered is incorrect.';
 	}
-	add_filter('login_errors', 'failed_login');
+	add_filter('login_errors', 'wpinit_failed_login');
 } # end if: !is_admin()
 
 /* 
 * Helper Functions
 */
-function wpini_url($s){ return plugins_url($s, __FILE__); }
-function wpini_folder($s){ return plugin_dir_path() . $s; }
+function wpinit_url($s){ return plugins_url($s, __FILE__); }
+function wpinit_dir($s){ return plugin_dir_path(__FILE__) . $s; }
