@@ -2,6 +2,9 @@ jQuery(document).ready(function($){
 	$('#wpinit_create_pages').on('click', function(){
 		clickButton(this, $, 'Working...');
 	});
+	$('#wpinit_create_categories').on('click', function(){
+		clickButton(this, $, 'Working...');
+	});	
 });
 function clickButton(elem, $, preMessage){
 	var preMessage = preMessage || '';

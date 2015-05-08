@@ -1,6 +1,6 @@
 <?php
 class WP_Init_Ajax{
-	static $actions = array('wpinit_create_pages');
+	static $actions = array('wpinit_create_pages', 'wpinit_create_categories');
 	
 	# register actions with wp_ajax_
 	function add_actions(){
@@ -91,9 +91,42 @@ class WP_Init_Ajax{
 			'post_status' => 'publish'
 		);
 		self::insert_post($contact);
-		
+		echo '<br /><b>DONE</b>';
 		die();
-	}
+	} # end: wpinit_create_pages()
+	
+	function wpinit_create_categories(){
+		# default category
+		$default_cat = get_term_by('id', get_option('default_category'), 'category');
+		## change name to `Postings` if set to `Uncategorized`
+		if($default_cat->name == 'Uncategorized'){
+			# edit the category name and slug
+			$update_cat = wp_update_term( $default_cat->term_id, 'category',
+				array(
+					'name' => 'Postings',
+					'slug' => 'postings'
+				)
+			);
+			if(is_object($update_cat)) echo 'Problem updating default category.<br />';
+			else echo 'Updated default category from `Uncategorized` to `Postings`<br />';
+		} # end if: default is Uncategorized
+		# If default is not `Uncategorized` then display a message
+		else{
+			echo 'Default category is already set.<br />';
+		}
+		
+		# create new categories
+		$new_cats = array(
+			array('cat_name' => 'Testimonials'),
+			array('cat_name' => 'FAQ\'s', 'category_nicename' => 'faq'),
+			array('cat_name' => 'Helpful Hints'),
+		);
+		foreach($new_cats as $cat){
+			self::insert_category($cat);
+		} # end foreach: new categories
+		die();
+	} # end: wpinit_create_categories()
+	
 	/*
 	* Helper Functions
 	*/
@@ -116,5 +149,30 @@ class WP_Init_Ajax{
 		}
 		else echo 'Page "' . $args['post_title'] . '" already exists.<br />';		
 	}
+	
+	# Insert a category, checking if it exists first and echoing a message
+	#
+	# minimum input:
+	# array(
+	#	'cat_name' => '',
+	#	'category_nicename' => ''
+	# )
+	function insert_category($cat){
+		# make sure we have the necessary arguments in our array
+		if(!isset($cat['cat_name'])) return;
+		if(!isset($cat['category_nicename'])) $cat['category_nicename'] = WP_Init::clean_str_for_url($cat['cat_name']);
+		
+		# check if category already exists
+		if(get_term_by('slug', $cat['category_nicename'], 'category')){
+			echo 'Category "'. $cat['cat_name'] .'" already exists<br />';
+			return;
+		}
+		# insert the term
+		if(!is_object(wp_insert_category($cat))){
+			echo 'Category "'. $cat['cat_name'] .'" created<br />';
+			return;
+		}
+		echo 'Problem creating category "'. $cat['cat_name'] . '"<br />';	
+	}	
 	
 } # end class: WP_Init_Ajax

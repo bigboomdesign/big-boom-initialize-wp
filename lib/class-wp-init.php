@@ -6,10 +6,11 @@ class WP_Init{
 	* Back end
 	*/
 	function admin_enqueue(){
-		wp_enqueue_style('wp-initialize-css', wpinit_url('/css/wp-initialize.css'));	
+		wp_enqueue_style('wp-init-css', wpinit_url('/css/wp-init-admin.css'));	
 		
 		$screen = get_current_screen();
 		if($screen->base == 'tools_page_wp_initialization'){
+			wp_enqueue_style('wp-init-tools-css', wpinit_url('/css/wp-init-tools.css'));
 			wp_enqueue_script('wp-init-tools-js', wpinit_url('/js/wp-init-tools.js'));
 		}	
 	}
@@ -23,9 +24,16 @@ class WP_Init{
 		<div class='wrap'>
 			<h2><span class='bbd-red'>Big Boom Design</span> WP Initialize</h2>
 			<?php
+				# Content
+				## pages
 				WP_Init_Ajax::action_button(array(
-					'label' => 'Generate default content',
+					'label' => 'Generate default pages',
 					'id' => 'wpinit_create_pages'
+				));
+				## categories
+				WP_Init_Ajax::action_button(array(
+					'label' => 'Create default categories',
+					'id' => 'wpinit_create_categories'
 				));
 			?>
 		</div>
