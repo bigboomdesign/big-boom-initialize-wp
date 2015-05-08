@@ -27,13 +27,19 @@ class WP_Init{
 				# Content
 				## pages
 				WP_Init_Ajax::action_button(array(
-					'label' => 'Generate default pages',
+					'label' => 'Generate pages',
 					'id' => 'wpinit_create_pages'
 				));
 				## categories
 				WP_Init_Ajax::action_button(array(
-					'label' => 'Create default categories',
+					'label' => 'Create categories',
 					'id' => 'wpinit_create_categories'
+				));
+				
+				# Options
+				WP_Init_Ajax::action_button(array(
+					'label' => 'Set options',
+					'id' => 'wpinit_set_options'
 				));
 			?>
 		</div>

@@ -1,6 +1,6 @@
 <?php
 class WP_Init_Ajax{
-	static $actions = array('wpinit_create_pages', 'wpinit_create_categories');
+	static $actions = array('wpinit_create_pages', 'wpinit_create_categories', 'wpinit_set_options');
 	
 	# register actions with wp_ajax_
 	function add_actions(){
@@ -13,7 +13,7 @@ class WP_Init_Ajax{
 		$args = shortcode_atts(
 			array(
 				'id' => '',
-				'label' => 'Action Button',
+				'label' => '',
 				'button_text' => 'Go',
 				'class' => '',
 				'description' => '',
@@ -26,7 +26,9 @@ class WP_Init_Ajax{
 		if(!$id) return;
 	?>
 	<div class='action-button-container'>
-		<h3><?php echo $label; ?></h3>
+		<?php if($label){ ?>
+			<h3><?php echo $label; ?></h3>
+		<?php } ?>
 		<?php if($description){
 			?><p id='description'><?php echo $description; ?></p><?php
 		}
@@ -91,7 +93,6 @@ class WP_Init_Ajax{
 			'post_status' => 'publish'
 		);
 		self::insert_post($contact);
-		echo '<br /><b>DONE</b>';
 		die();
 	} # end: wpinit_create_pages()
 	
@@ -108,7 +109,7 @@ class WP_Init_Ajax{
 				)
 			);
 			if(is_object($update_cat)) echo 'Problem updating default category.<br />';
-			else echo 'Updated default category from `Uncategorized` to `Postings`<br />';
+			else echo 'Updated default category from `Uncategorized` to `Postings`.<br />';
 		} # end if: default is Uncategorized
 		# If default is not `Uncategorized` then display a message
 		else{
@@ -126,6 +127,84 @@ class WP_Init_Ajax{
 		} # end foreach: new categories
 		die();
 	} # end: wpinit_create_categories()
+	function wpinit_set_options(){
+		# permalink structure
+		if(self::update_option(array(
+			'option' => 'permalink_structure',
+			'value' => '/%category%/%postname%',
+			'label' => 'Permalink structure'
+		))){
+			# we need to update/flush the rewrite rules if option was changed
+			global $wp_rewrite;
+			$wp_rewrite->set_permalink_structure( '/%category%/%postname%' );
+			$wp_rewrite->flush_rules();		
+		}
+		
+		# year/month folders for media uploads
+		self::update_option(array(
+			'option' => 'uploads_use_yearmonth_folders',
+			'value' => '0',
+			'label' => 'Media folder option'
+		));
+		
+		# default comment status
+		self::update_option(array(
+			'option' => 'default_comment_status',
+			'value' => 'closed',
+			'label' => 'Default comment status'
+		));
+		
+		# default ping status
+		self::update_option(array(
+			'option' => 'default_ping_status',
+			'value' => 'closed',
+			'label' => 'Default ping status'
+		));
+		# comment moderation
+		self::update_option(array(
+			'option' => 'comment_moderation',
+			'value' => '1',
+			'label' => 'Comment Moderation'
+		));
+		# close_comments_for_old_posts
+		self::update_option(array(
+			'option' => 'close_comments_for_old_posts',
+			'value' => '1',
+			'label' => 'Close comments for old posts'
+		));
+		# close_comments_days_old
+		self::update_option(array(
+			'option' => 'close_comments_days_old',
+			'value' => '0',
+			'label' => 'Days to close comments'
+		));
+		# set home page
+		if($home_page = get_page_by_title('Home', '', 'page')){
+			# show_on_front
+			self::update_option(array(
+				'option' => 'show_on_front',
+				'value' => 'page',
+				'label' => 'Show on front'
+			));
+			# page_on_front
+			self::update_option(array(
+				'option' => 'page_on_front',
+				'value' => strval($home_page->ID),
+				'label' => 'Page on front'
+			));
+			# page_for_posts
+			if($blog_page = get_page_by_title('Blog')){
+				self::update_option(array(
+					'option' => 'page_for_posts',
+					'value' => strval($blog_page->ID),
+					'label' => 'Page for posts'
+				));
+			}
+			else echo '<span class="fail">We couldn\'t find the Blog page.</span><br />';
+		}
+		else echo '<span class="fail">We couldn\'t locate the Home page.</span><br />';
+		die();
+	} # end: wpinit_set_options()
 	
 	/*
 	* Helper Functions
@@ -137,6 +216,7 @@ class WP_Init_Ajax{
 	# array(
 	#	'post_title' => '',
 	# )
+	
 	function insert_post($args){
 		if(!array_key_exists('post_title', $args)) return;
 		# add slug if none is given
@@ -145,7 +225,7 @@ class WP_Init_Ajax{
 			$new_id = wp_insert_post($args);
 			# if we got an object back, that's an error
 			if(is_object($new_id)) echo 'Error with page ' . $args['post_title'];
-			else echo 'Inserted ' . $args['post_title'] . ' page: ID ' . $new_id . '<br />';
+			else echo '<span class="success">Inserted ' . $args['post_title'] . ' page.</span><br />';
 		}
 		else echo 'Page "' . $args['post_title'] . '" already exists.<br />';		
 	}
@@ -157,6 +237,7 @@ class WP_Init_Ajax{
 	#	'cat_name' => '',
 	#	'category_nicename' => ''
 	# )
+	
 	function insert_category($cat){
 		# make sure we have the necessary arguments in our array
 		if(!isset($cat['cat_name'])) return;
@@ -169,10 +250,39 @@ class WP_Init_Ajax{
 		}
 		# insert the term
 		if(!is_object(wp_insert_category($cat))){
-			echo 'Category "'. $cat['cat_name'] .'" created<br />';
+			echo '<span class="success">Category "'. $cat['cat_name'] .'" created.</span><br />';
 			return;
 		}
 		echo 'Problem creating category "'. $cat['cat_name'] . '"<br />';	
-	}	
+	}
+	
+	# Update an option, checking the current value first and echoing a message
+	#
+	# input:
+	# array(
+	#	'option' => '',
+	# 	'label' => '',
+	#	'value' => '',
+	# )
+	#
+	# return 1 if option was changed
+	
+	function update_option($args){
+		# make sure we have the right keys
+		if(!isset($args['option']) || !isset($args['label']) || !isset($args['value'])) return;
+		
+		# the value that's currently set
+		$old_value = get_option($args['option']);
+		
+		if($args['value'] !== $old_value){
+			if(update_option($args['option'], $args['value'])){
+				echo '<span class="success">'.$args['label'] . ' has been set set to <code>'. $args['value'] .'</code>.</span><br />';
+				return 1;
+			}
+			else echo '<span class="fail">Problem updating '. $args['label'] .'.</span><br />';
+		}
+		else echo $args['label'] . ' is already set to <code>'. $args['value'] .'</code>.<br />';
+		return 0;
+	}
 	
 } # end class: WP_Init_Ajax
