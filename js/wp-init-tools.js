@@ -7,6 +7,9 @@ jQuery(document).ready(function($){
 	});
 	$('#wpinit_set_options').on('click', function(){
 		clickButton(this, $, 'Working...');
+	});
+	$('#wpinit_create_menu').on('click', function(){
+		clickButton(this, $, 'Working...');
 	});	
 });
 function clickButton(elem, $, preMessage){

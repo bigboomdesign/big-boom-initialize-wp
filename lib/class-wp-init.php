@@ -41,6 +41,11 @@ class WP_Init{
 					'label' => 'Set options',
 					'id' => 'wpinit_set_options'
 				));
+				# Menu
+				WP_Init_Ajax::action_button(array(
+					'label' => 'Create menu',
+					'id' => 'wpinit_create_menu'
+				));
 			?>
 		</div>
 	<?php

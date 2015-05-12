@@ -1,6 +1,6 @@
 <?php
 class WP_Init_Ajax{
-	static $actions = array('wpinit_create_pages', 'wpinit_create_categories', 'wpinit_set_options');
+	static $actions = array('wpinit_create_pages', 'wpinit_create_categories', 'wpinit_set_options', 'wpinit_create_menu');
 	
 	# register actions with wp_ajax_
 	function add_actions(){
@@ -108,8 +108,8 @@ class WP_Init_Ajax{
 					'slug' => 'postings'
 				)
 			);
-			if(is_object($update_cat)) echo 'Problem updating default category.<br />';
-			else echo 'Updated default category from `Uncategorized` to `Postings`.<br />';
+			if(is_object($update_cat)) echo '<span class="fail">Problem updating default category.</span><br />';
+			else echo 'Updated default category from <code>Uncategorized</code> to <code>Postings</code>.<br />';
 		} # end if: default is Uncategorized
 		# If default is not `Uncategorized` then display a message
 		else{
@@ -205,6 +205,66 @@ class WP_Init_Ajax{
 		else echo '<span class="fail">We couldn\'t locate the Home page.</span><br />';
 		die();
 	} # end: wpinit_set_options()
+
+	# Create menu and menu items
+	function wpinit_create_menu(){
+		# make sure menu 'Main Menu' doesn't already exist
+		if(wp_get_nav_menu_object('Main Menu')){
+			echo 'There\'s already a menu called <code>Main Menu</code>';
+			die();
+		}
+		# create the menu
+	    $menu_id = wp_create_nav_menu('Main Menu');
+	    
+	    ## pages
+	    $pages = array('Home', 'About Us', 'Services', 'Blog', 'Contact');
+	    foreach($pages as $page){
+	    	# make sure we have the page to add as a menu item
+	    	if(!($page_obj = get_page_by_title($page))){
+	    		echo '<span class="fail"><code>'. $page .'</code> page not found.</span><br />';
+	    		continue;
+	    	}
+	    	# add the page as a menu item
+	    	
+	    	$new_menu_item_id = self::create_menu_item( array(
+	    		# for the WP function wp_update_nav_menu_item()
+	    		'menu-item-title' => $page_obj->post_title,
+	    		'menu-item-object-id' => $page_obj->ID,
+	    		'menu-item-object' => 'page',
+	    		'menu-item-type' => 'post_type',
+	    		'menu-item-status' => 'publish',
+	    		
+	    		# for our custom function
+	    		'menu_id' => $menu_id,
+	    	));
+
+	    	# we're done now except for blog item
+	    	# for the blog item, we need to add submenu items
+	    	if($page != 'Blog') continue;
+	    	
+	    	$cats = array('faq', 'helpful-hints', 'testimonials');
+	    	foreach($cats as $cat){
+	    		# make sure the category exists
+	    		if(!($cat_obj = get_category_by_slug($cat))){
+	    			echo '<span class="fail">Category <code>'. $cat .'</code> doesn\'t exist.</span><br />';
+	    			continue;
+	    		}
+	    		self::create_menu_item(array(
+					# for the WP function wp_update_nav_menu_item()
+					'menu-item-title' => $cat_obj->name,
+					'menu-item-object-id' => $cat_obj->term_id,
+					'menu-item-parent-id' => $new_menu_item_id,
+					'menu-item-object' => 'category',
+					'menu-item-type' => 'taxonomy',
+					'menu-item-status' => 'publish',
+				
+					# for our custom function
+					'menu_id' => $menu_id,
+	    		));
+	    	}
+	    }
+		die();
+	}
 	
 	/*
 	* Helper Functions
@@ -224,10 +284,10 @@ class WP_Init_Ajax{
 		if(!get_page_by_path($args['name'])){
 			$new_id = wp_insert_post($args);
 			# if we got an object back, that's an error
-			if(is_object($new_id)) echo 'Error with page ' . $args['post_title'];
-			else echo '<span class="success">Inserted ' . $args['post_title'] . ' page.</span><br />';
+			if(is_object($new_id)) echo 'Error with page <code>' . $args['post_title'].'</code>';
+			else echo '<span class="success">Inserted <code>' . $args['post_title'] . '</code> page.</span><br />';
 		}
-		else echo 'Page "' . $args['post_title'] . '" already exists.<br />';		
+		else echo 'Page <code>' . $args['post_title'] . '</code> already exists.<br />';		
 	}
 	
 	# Insert a category, checking if it exists first and echoing a message
@@ -245,15 +305,15 @@ class WP_Init_Ajax{
 		
 		# check if category already exists
 		if(get_term_by('slug', $cat['category_nicename'], 'category')){
-			echo 'Category "'. $cat['cat_name'] .'" already exists<br />';
+			echo 'Category <code>'. $cat['cat_name'] .'</code> already exists.<br />';
 			return;
 		}
 		# insert the term
 		if(!is_object(wp_insert_category($cat))){
-			echo '<span class="success">Category "'. $cat['cat_name'] .'" created.</span><br />';
+			echo '<span class="success">Category <code>'. $cat['cat_name'] .'</code> created.</span><br />';
 			return;
 		}
-		echo 'Problem creating category "'. $cat['cat_name'] . '"<br />';	
+		echo '<span class="fail">Problem creating category <code>'. $cat['cat_name'] . '</code>.</span><br />';	
 	}
 	
 	# Update an option, checking the current value first and echoing a message
@@ -283,6 +343,27 @@ class WP_Init_Ajax{
 		}
 		else echo $args['label'] . ' is already set to <code>'. $args['value'] .'</code>.<br />';
 		return 0;
-	}
+	} # end: update_option()
+	
+	# Add a menu item
+	#
+	# minimum input:
+	# array(
+	#	'menu_id' => 0,
+	#	'menu-item-title' => '',
+	# )
+	
+	function create_menu_item($args){
+		# make sure we have a menu_id
+		if(!$args['menu_id']) return;
+		# insert the menu item and make sure we don't have an error
+		$menu_item_id = wp_update_nav_menu_item($args['menu_id'], 0, $args);
+		if(is_wp_error($menu_item_id)){
+			echo '<span class="fail">There was a problem with the <code>'. $args['menu-item-title'] .'</code> menu item.</span><br />';
+			return;
+		}
+		echo '<span class="success">Menu item <code>'. $args['menu-item-title'] .'</code> successfully added.</span><br />';
+		return $menu_item_id;
+	} # end: create_menu_item()
 	
 } # end class: WP_Init_Ajax
