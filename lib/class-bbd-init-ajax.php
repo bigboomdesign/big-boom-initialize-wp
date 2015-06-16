@@ -1,11 +1,11 @@
 <?php
-class WP_Init_Ajax{
-	static $actions = array('wpinit_create_pages', 'wpinit_create_categories', 'wpinit_set_options', 'wpinit_create_menu');
+class BBD_Init_Ajax{
+	static $actions = array('bbdi_create_pages', 'bbdi_create_categories', 'bbdi_set_options', 'bbdi_create_menu');
 	
 	# register actions with wp_ajax_
 	function add_actions(){
 		foreach(self::$actions as $action){
-			add_action('wp_ajax_'.$action, array('WP_Init_Ajax', $action));			
+			add_action('wp_ajax_'.$action, array('BBD_Init_Ajax', $action));			
 		}
 	}
 	# display an action button section
@@ -18,7 +18,7 @@ class WP_Init_Ajax{
 				'class' => '',
 				'description' => '',
 				'instructions' => '',
-			), $args, 'wpinit_action_button'
+			), $args, 'bbdi_action_button'
 		);
 		extract($args);
 
@@ -48,7 +48,7 @@ class WP_Init_Ajax{
 	/*
 	* Ajax actions
 	*/
-	function wpinit_create_pages(){
+	function bbdi_create_pages(){
 		# Home
 		$home = array(
 			'post_type' => 'page',
@@ -94,9 +94,9 @@ class WP_Init_Ajax{
 		);
 		self::insert_post($contact);
 		die();
-	} # end: wpinit_create_pages()
+	} # end: bbdi_create_pages()
 	
-	function wpinit_create_categories(){
+	function bbdi_create_categories(){
 		# default category
 		$default_cat = get_term_by('id', get_option('default_category'), 'category');
 		## change name to `Postings` if set to `Uncategorized`
@@ -126,8 +126,8 @@ class WP_Init_Ajax{
 			self::insert_category($cat);
 		} # end foreach: new categories
 		die();
-	} # end: wpinit_create_categories()
-	function wpinit_set_options(){
+	} # end: bbdi_create_categories()
+	function bbdi_set_options(){
 		# permalink structure
 		if(self::update_option(array(
 			'option' => 'permalink_structure',
@@ -204,10 +204,10 @@ class WP_Init_Ajax{
 		}
 		else echo '<span class="fail">We couldn\'t locate the Home page.</span><br />';
 		die();
-	} # end: wpinit_set_options()
+	} # end: bbdi_set_options()
 
 	# Create menu and menu items
-	function wpinit_create_menu(){
+	function bbdi_create_menu(){
 		# make sure menu 'Main Menu' doesn't already exist
 		if(wp_get_nav_menu_object('Main Menu')){
 			echo 'There\'s already a menu called <code>Main Menu</code>';
@@ -280,7 +280,7 @@ class WP_Init_Ajax{
 	function insert_post($args){
 		if(!array_key_exists('post_title', $args)) return;
 		# add slug if none is given
-		if(!array_key_exists('name', $args)) $args['name'] = WP_Init::clean_str_for_url($args['post_title']);
+		if(!array_key_exists('name', $args)) $args['name'] = BBD_Init::clean_str_for_url($args['post_title']);
 		if(!get_page_by_path($args['name'])){
 			$new_id = wp_insert_post($args);
 			# if we got an object back, that's an error
@@ -301,7 +301,7 @@ class WP_Init_Ajax{
 	function insert_category($cat){
 		# make sure we have the necessary arguments in our array
 		if(!isset($cat['cat_name'])) return;
-		if(!isset($cat['category_nicename'])) $cat['category_nicename'] = WP_Init::clean_str_for_url($cat['cat_name']);
+		if(!isset($cat['category_nicename'])) $cat['category_nicename'] = BBD_Init::clean_str_for_url($cat['cat_name']);
 		
 		# check if category already exists
 		if(get_term_by('slug', $cat['category_nicename'], 'category')){
@@ -366,4 +366,4 @@ class WP_Init_Ajax{
 		return $menu_item_id;
 	} # end: create_menu_item()
 	
-} # end class: WP_Init_Ajax
+} # end class: BBD_Init_Ajax

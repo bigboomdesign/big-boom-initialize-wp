@@ -1,50 +1,50 @@
 <?php
-class WP_Init{
-	static $classes = array('wp-init-ajax');
+class BBD_Init{
+	static $classes = array('bbd-init-ajax');
 	
 	/*
 	* Back end
 	*/
 	function admin_enqueue(){
-		wp_enqueue_style('wp-init-css', wpinit_url('/css/wp-init-admin.css'));	
+		wp_enqueue_style('bbd-init-css', bbdi_url('/css/bbd-init-admin.css'));	
 		
 		$screen = get_current_screen();
-		if($screen->base == 'tools_page_wp_initialization'){
-			wp_enqueue_style('wp-init-tools-css', wpinit_url('/css/wp-init-tools.css'));
-			wp_enqueue_script('wp-init-tools-js', wpinit_url('/js/wp-init-tools.js'));
+		if($screen->base == 'tools_page_bbd_initialization'){
+			wp_enqueue_style('bbd-init-tools-css', bbdi_url('/css/bbd-init-tools.css'));
+			wp_enqueue_script('bbd-init-tools-js', bbdi_url('/js/bbd-init-tools.js'));
 		}	
 	}
 	# Admin menu item
 	function admin_menu(){
-		add_management_page( 'WP Initialize', 'WP Initialize', 'manage_options', 'wp_initialization', array('WP_Init','initialization_page'));
+		add_management_page( 'Big Boom Initialize WP', 'Big Boom Initialize WP', 'manage_options', 'bbd_initialization', array('BBD_Init','initialization_page'));
 	}
 	# Main Init page
 	function initialization_page(){
 	?>
 		<div class='wrap'>
-			<h2><span class='bbd-red'>Big Boom Design</span> WP Initialize</h2>
+			<h2><span class='bbd-red'>Big Boom Design</span> Initialize WP</h2>
 			<?php
 				# Content
 				## pages
-				WP_Init_Ajax::action_button(array(
+				BBD_Init_Ajax::action_button(array(
 					'label' => 'Generate pages',
-					'id' => 'wpinit_create_pages'
+					'id' => 'bbdi_create_pages'
 				));
 				## categories
-				WP_Init_Ajax::action_button(array(
+				BBD_Init_Ajax::action_button(array(
 					'label' => 'Create categories',
-					'id' => 'wpinit_create_categories'
+					'id' => 'bbdi_create_categories'
 				));
 				
 				# Options
-				WP_Init_Ajax::action_button(array(
+				BBD_Init_Ajax::action_button(array(
 					'label' => 'Set options',
-					'id' => 'wpinit_set_options'
+					'id' => 'bbdi_set_options'
 				));
 				# Menu
-				WP_Init_Ajax::action_button(array(
+				BBD_Init_Ajax::action_button(array(
 					'label' => 'Create menu',
-					'id' => 'wpinit_create_menu'
+					'id' => 'bbdi_create_menu'
 				));
 			?>
 		</div>
@@ -74,4 +74,4 @@ class WP_Init{
 	}	
 }
 # require files for plugin
-foreach(WP_Init::$classes as $class){ WP_Init::req_file(wpinit_dir("/lib/class-{$class}.php")); }
+foreach(BBD_Init::$classes as $class){ BBD_Init::req_file(bbdi_dir("/lib/class-{$class}.php")); }

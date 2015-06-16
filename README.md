@@ -1,4 +1,4 @@
-# Big Boom Design WP Initialize
+# Big Boom Initialize WP
 
 Initialize options and sample content for your WordPress site
 

@@ -1,14 +1,14 @@
 jQuery(document).ready(function($){
-	$('#wpinit_create_pages').on('click', function(){
+	$('#bbdi_create_pages').on('click', function(){
 		clickButton(this, $, 'Working...');
 	});
-	$('#wpinit_create_categories').on('click', function(){
+	$('#bbdi_create_categories').on('click', function(){
 		clickButton(this, $, 'Working...');
 	});
-	$('#wpinit_set_options').on('click', function(){
+	$('#bbdi_set_options').on('click', function(){
 		clickButton(this, $, 'Working...');
 	});
-	$('#wpinit_create_menu').on('click', function(){
+	$('#bbdi_create_menu').on('click', function(){
 		clickButton(this, $, 'Working...');
 	});	
 });
