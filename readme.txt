@@ -4,20 +4,19 @@ Requires at least: 3.5
 Tested up to: 4.2.2
 Stable tag: 1.0.1
 
-Within seconds, you can turn a fresh WordPress install into a site with a basic content structure and sensible initial settings.
+Initialize content and options for your WordPress site. 
 
 == Description ==
 
 # Big Boom Initialize WP
 
-Initialize content and options for your WordPress site. 
-
 Within seconds, you can turn a fresh WordPress install into a site with a basic content structure and sensible initial settings. From here, any settings and content can be changed as usual.
 
 This plugin is not suggested for sites with existing content and structure in place, as it is meant to initialize an empty installation.
 
-----
-## Features
+* From [Big Boom Design](http://www.bigboomdesign.com)
+
+= Features =
 
 * Initialize default pages instantly, with _lorem ipsum_ text in place on each page
 	* Home
@@ -26,16 +25,17 @@ This plugin is not suggested for sites with existing content and structure in pl
 	* Blog
 	* Contact
 	
-* Categories
+* Initialize Categories
 	* Catch-all is changed to `Postings` if currently set to `Uncategorized`
 	* New categories are created
 		* Testimonials
 		* FAQ's
 		* Helpful Hints
 
-* Menu and Menu Items
+* Initialize Menu and Menu Items
 	* A menu called `Main Menu` is created. If it already exists, the menu initialization process is terminated.
 	* Menu items are created for `Main Menu` based on the auto-generated pages and categories above.
+	* Note that you'll need to set a Menu Location under `Appearance > Menus` since this depends on your theme.
 
 * Initialize WP core settings
 	* Permalink Structure: `%category%/%postname%`
