@@ -8,8 +8,6 @@ Initialize content and options for your WordPress site.
 
 == Description ==
 
-# Big Boom Initialize WP
-
 Within seconds, you can turn a fresh WordPress install into a site with a basic content structure and sensible initial settings. From here, any settings and content can be changed as usual.
 
 This plugin is not suggested for sites with existing content and structure in place, as it is meant to initialize an empty installation.
