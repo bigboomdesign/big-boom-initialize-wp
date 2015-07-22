@@ -16,16 +16,17 @@ This plugin is not suggested for sites with existing content and structure in pl
 	* Blog
 	* Contact
 	
-* Categories
+* Initialize Categories
 	* Catch-all is changed to `Postings` if currently set to `Uncategorized`
 	* New categories are created
 		* Testimonials
 		* FAQ's
 		* Helpful Hints
 
-* Menu and Menu Items
+* Initialize Menu and Menu Items
 	* A menu called `Main Menu` is created. If it already exists, the menu initialization process is terminated.
 	* Menu items are created for `Main Menu` based on the auto-generated pages and categories above.
+	* Note that you'll need to set a Menu Location under `Appearance > Menus` since this depends on your theme.
 
 * Initialize WP core settings
 	* Permalink Structure: `%category%/%postname%`
