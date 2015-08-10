@@ -3,13 +3,13 @@ class BBD_Init_Ajax{
 	static $actions = array('bbdi_create_pages', 'bbdi_create_categories', 'bbdi_set_options', 'bbdi_create_menu');
 	
 	# register actions with wp_ajax_
-	function add_actions(){
+	public static function add_actions(){
 		foreach(self::$actions as $action){
 			add_action('wp_ajax_'.$action, array('BBD_Init_Ajax', $action));			
 		}
 	}
 	# display an action button section
-	function action_button($args){
+	public static function action_button($args){
 		$args = shortcode_atts(
 			array(
 				'id' => '',
@@ -48,7 +48,7 @@ class BBD_Init_Ajax{
 	/*
 	* Ajax actions
 	*/
-	function bbdi_create_pages(){
+	public static function bbdi_create_pages(){
 		# Home
 		$home = array(
 			'post_type' => 'page',
@@ -96,7 +96,7 @@ class BBD_Init_Ajax{
 		die();
 	} # end: bbdi_create_pages()
 	
-	function bbdi_create_categories(){
+	public static function bbdi_create_categories(){
 		# default category
 		$default_cat = get_term_by('id', get_option('default_category'), 'category');
 		## change name to `Postings` if set to `Uncategorized`
@@ -127,7 +127,7 @@ class BBD_Init_Ajax{
 		} # end foreach: new categories
 		die();
 	} # end: bbdi_create_categories()
-	function bbdi_set_options(){
+	public static function bbdi_set_options(){
 		# permalink structure
 		if(self::update_option(array(
 			'option' => 'permalink_structure',
@@ -207,7 +207,7 @@ class BBD_Init_Ajax{
 	} # end: bbdi_set_options()
 
 	# Create menu and menu items
-	function bbdi_create_menu(){
+	public static function bbdi_create_menu(){
 		# make sure menu 'Main Menu' doesn't already exist
 		if(wp_get_nav_menu_object('Main Menu')){
 			echo 'There\'s already a menu called <code>Main Menu</code>';
@@ -277,7 +277,7 @@ class BBD_Init_Ajax{
 	#	'post_title' => '',
 	# )
 	
-	function insert_post($args){
+	public static function insert_post($args){
 		if(!array_key_exists('post_title', $args)) return;
 		# add slug if none is given
 		if(!array_key_exists('name', $args)) $args['name'] = BBD_Init::clean_str_for_url($args['post_title']);
@@ -298,7 +298,7 @@ class BBD_Init_Ajax{
 	#	'category_nicename' => ''
 	# )
 	
-	function insert_category($cat){
+	public static function insert_category($cat){
 		# make sure we have the necessary arguments in our array
 		if(!isset($cat['cat_name'])) return;
 		if(!isset($cat['category_nicename'])) $cat['category_nicename'] = BBD_Init::clean_str_for_url($cat['cat_name']);
@@ -327,7 +327,7 @@ class BBD_Init_Ajax{
 	#
 	# return 1 if option was changed
 	
-	function update_option($args){
+	public static function update_option($args){
 		# make sure we have the right keys
 		if(!isset($args['option']) || !isset($args['label']) || !isset($args['value'])) return;
 		
@@ -353,7 +353,7 @@ class BBD_Init_Ajax{
 	#	'menu-item-title' => '',
 	# )
 	
-	function create_menu_item($args){
+	public static function create_menu_item($args){
 		# make sure we have a menu_id
 		if(!$args['menu_id']) return;
 		# insert the menu item and make sure we don't have an error

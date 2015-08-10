@@ -5,7 +5,7 @@ class BBD_Init{
 	/*
 	* Back end
 	*/
-	function admin_enqueue(){
+	public static function admin_enqueue(){
 		wp_enqueue_style('bbd-init-css', bbdi_url('/css/bbd-init-admin.css'));	
 		
 		$screen = get_current_screen();
@@ -15,11 +15,11 @@ class BBD_Init{
 		}	
 	}
 	# Admin menu item
-	function admin_menu(){
+	public static function admin_menu(){
 		add_management_page( 'Big Boom Initialize WP', 'Big Boom Initialize WP', 'manage_options', 'bbd_initialization', array('BBD_Init','initialization_page'));
 	}
 	# Main Init page
-	function initialization_page(){
+	public static function initialization_page(){
 	?>
 		<div class='wrap'>
 			<h2><span class='bbd-red'>Big Boom Design</span> Initialize WP</h2>
@@ -56,9 +56,9 @@ class BBD_Init{
 	*/
 	
 	# require a file, checking first if it exists
-	function req_file($path){ if(file_exists($path)) require_once $path; }
+	public static function req_file($path){ if(file_exists($path)) require_once $path; }
 	# return a permalink-friendly version of a string
-	function clean_str_for_url( $sIn ){
+	public static function clean_str_for_url( $sIn ){
 		if( $sIn == "" ) return "";
 		$sOut = trim( strtolower( $sIn ) );
 		$sOut = preg_replace( "/\s\s+/" , " " , $sOut );					
