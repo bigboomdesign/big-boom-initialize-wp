@@ -1,8 +1,8 @@
 === Big Boom Initialize WP ===
 Contributors:  bigboomdesign, michaelhull
 Requires at least: 3.5
-Tested up to: 4.4.2
-Stable tag: 1.1.0
+Tested up to: 4.4
+Stable tag: 1.1.1
 
 Initialize content and options for your WordPress site. 
 

@@ -4,7 +4,7 @@ Plugin Name: Big Boom Initialize WP
 Description: Initialize options and sample content for your WordPress site
 Author: Big Boom Design
 Author URI: http://www.bigboomdesign.com
-Version: 1.1.0
+Version: 1.1.1
 */
 
 /* 

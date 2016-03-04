@@ -38,6 +38,7 @@ body.login{background: none;}
 	line-height:16px;
 	padding:3px 10px;
 	float:right;
+	text-shadow: none;
 }
 #login {
 	width:320px;
