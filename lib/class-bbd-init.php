@@ -23,28 +23,36 @@ class BBD_Init{
 	?>
 		<div class='wrap'>
 			<h2><span class='bbd-red'>Big Boom Design</span> Initialize WP</h2>
+			
+			<div class='logo'>
+				Test
+			</div>
+			
 			<?php
 				# Content
 				## pages
 				BBD_Init_Ajax::action_button(array(
 					'label' => 'Generate pages',
-					'id' => 'bbdi_create_pages'
+					'id' => 'bbdi_create_pages',
+					'description' => 'Generates an About Us page, Blog page, Contact page, Home page, and Services page.',
 				));
 				## categories
 				BBD_Init_Ajax::action_button(array(
 					'label' => 'Create categories',
-					'id' => 'bbdi_create_categories'
+					'id' => 'bbdi_create_categories',
+					'description' => "Sets the default category to Postings and creates Testimonials, FAQ's, and Helpful Hints categories."
 				));
-				
 				# Options
 				BBD_Init_Ajax::action_button(array(
 					'label' => 'Set options',
-					'id' => 'bbdi_set_options'
+					'id' => 'bbdi_set_options',
+					'description' => 'Sets options in the WordPress Settings, making changes to your General, Reading, Discussion, and Permalink settings.'
 				));
 				# Menu
 				BBD_Init_Ajax::action_button(array(
 					'label' => 'Create menu',
-					'id' => 'bbdi_create_menu'
+					'id' => 'bbdi_create_menu',
+					'description' => 'Creates a menu called Main Menu and sets the Primary Menu to Main Menu.'
 				));
 			?>
 		</div>
