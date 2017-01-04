@@ -8,3 +8,13 @@
 .fail{
 	color: #B42D29;
 }
+.form-table th {
+	display: none;
+}
+.form-table td {
+	padding: 15px 0;
+}
+input#bbd_init_logo_slug {
+	width: 300px;
+	margin: 0;
+}

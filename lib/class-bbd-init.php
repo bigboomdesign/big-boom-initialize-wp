@@ -10,6 +10,7 @@ class BBD_Init{
 		
 		$screen = get_current_screen();
 		if($screen->base == 'tools_page_bbd_initialization'){
+			wp_enqueue_media();
 			wp_enqueue_style('bbd-init-tools-css', bbdi_url('/css/bbd-init-tools.css'));
 			wp_enqueue_script('bbd-init-tools-js', bbdi_url('/js/bbd-init-tools.js'));
 		}	
@@ -52,7 +53,7 @@ class BBD_Init{
 			));
 
 			?>
-
+			<h3>Upload Logo</h3>
 			<form action='options.php' method='post'>
 				<?php
 				# Custom Login Logo
@@ -67,6 +68,11 @@ class BBD_Init{
 	<?php
 	}
 	
+	/**
+	 * Register the settings amd add both the settings sections and field
+	 *
+	 * @since 1.2.0
+	 */
 	public static function admin_init() {
 		register_setting( 'bbd_init_options', 'bbd_init_options', array( 'BBD_Init', 'validate_options' ) );
 
@@ -75,7 +81,7 @@ class BBD_Init{
 		add_settings_field( 'logo_field', 'Upload your logo',
 			array( 'BBD_Init', 'settings_field_html' ), 'bbd_initialization', 'bbd_init_default',
 			array(
-				'description'	=> 'Upload your logo',
+				'description'	=> 'Choose or upload your logo that will be displayed on the WordPress login screen.',
 				'type'			=> 'text',
 				'name'			=> 'logo_field'
 			)
@@ -89,18 +95,29 @@ class BBD_Init{
 	 * @since 	1.2.0
 	 */
 	public static function validate_options( $input ) {
+		if ( ! empty( $input['logo_field'] ) ) {
+			$input['logo_field'] = esc_url_raw( $input['logo_field'] );
+		}
+
 		return $input;
 	}
 
-
+	/**
+	 * Create the settings fields
+	 *
+	 * @param 	$setting
+	 * @since 1.2.0
+	 */
 	public static function settings_field_html( $setting ) {
 		if ( 'text' == $setting['type'] ) {
 			$bbd_init_options = get_option( 'bbd_init_options' );
+
 			?>
 			
-			<input type='text' name='bbd_init_options[logo_field]' value='<?php if( isset( $bbd_init_options['logo_field'] ) ) echo $bbd_init_options['logo_field']; ?>' />
+			<input type='text' id='bbd_init_logo_slug' name='bbd_init_options[logo_field]' value='<?php if( isset( $bbd_init_options['logo_field'] ) ) echo $bbd_init_options['logo_field']; ?>' />
+			<button id='bbd_init_logo_upload' class='button button-secondary'>Upload Your Logo</button>
+			<p id='description'><?php echo $setting['description']; ?></p>
 
-			<p>Hello</p>
 			<?php
 		}
 	}
