@@ -16,6 +16,9 @@ require_once bbdi_dir('/lib/class-bbd-init.php');
 * Back end
 */
 if(is_admin()){
+	# Admin Init for settings fields
+	add_action( 'admin_init', array( 'BBD_Init', 'admin_init' ) );
+
 	# Scripts
 	add_action('admin_enqueue_scripts', array('BBD_Init','admin_enqueue'));
 

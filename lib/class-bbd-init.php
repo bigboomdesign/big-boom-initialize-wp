@@ -24,41 +24,87 @@ class BBD_Init{
 		<div class='wrap'>
 			<h2><span class='bbd-red'>Big Boom Design</span> Initialize WP</h2>
 			
-			<div class='logo'>
-				Test
-			</div>
-			
 			<?php
-				# Content
-				## pages
-				BBD_Init_Ajax::action_button(array(
-					'label' => 'Generate pages',
-					'id' => 'bbdi_create_pages',
-					'description' => 'Generates an About Us page, Blog page, Contact page, Home page, and Services page.',
-				));
-				## categories
-				BBD_Init_Ajax::action_button(array(
-					'label' => 'Create categories',
-					'id' => 'bbdi_create_categories',
-					'description' => "Sets the default category to Postings and creates Testimonials, FAQ's, and Helpful Hints categories."
-				));
-				# Options
-				BBD_Init_Ajax::action_button(array(
-					'label' => 'Set options',
-					'id' => 'bbdi_set_options',
-					'description' => 'Sets options in the WordPress Settings, making changes to your General, Reading, Discussion, and Permalink settings.'
-				));
-				# Menu
-				BBD_Init_Ajax::action_button(array(
-					'label' => 'Create menu',
-					'id' => 'bbdi_create_menu',
-					'description' => 'Creates a menu called Main Menu and sets the Primary Menu to Main Menu.'
-				));
+			# Content
+			## pages
+			BBD_Init_Ajax::action_button(array(
+				'label' => 'Generate pages',
+				'id' => 'bbdi_create_pages',
+				'description' => 'Generates an About Us page, Blog page, Contact page, Home page, and Services page.',
+			));
+			## categories
+			BBD_Init_Ajax::action_button(array(
+				'label' => 'Create categories',
+				'id' => 'bbdi_create_categories',
+				'description' => "Sets the default category to Postings and creates Testimonials, FAQ's, and Helpful Hints categories."
+			));
+			# Options
+			BBD_Init_Ajax::action_button(array(
+				'label' => 'Set options',
+				'id' => 'bbdi_set_options',
+				'description' => 'Sets options in the WordPress Settings, making changes to your General, Reading, Discussion, and Permalink settings.'
+			));
+			# Menu
+			BBD_Init_Ajax::action_button(array(
+				'label' => 'Create menu',
+				'id' => 'bbdi_create_menu',
+				'description' => 'Creates a menu called Main Menu and sets the Primary Menu to Main Menu.'
+			));
+
 			?>
+
+			<form action='options.php' method='post'>
+				<?php
+				# Custom Login Logo
+				settings_fields( 'bbd_init_options' );
+
+				do_settings_sections( 'bbd_initialization' );
+				submit_button();
+				?>
+			</form>
+
 		</div>
 	<?php
-	}	
+	}
 	
+	public static function admin_init() {
+		register_setting( 'bbd_init_options', 'bbd_init_options', array( 'BBD_Init', 'validate_options' ) );
+
+		add_settings_section( 'bbd_init_default', '', '__return_empty_string', 'bbd_initialization' );
+
+		add_settings_field( 'logo_field', 'Upload your logo',
+			array( 'BBD_Init', 'settings_field_html' ), 'bbd_initialization', 'bbd_init_default',
+			array(
+				'description'	=> 'Upload your logo',
+				'type'			=> 'text',
+				'name'			=> 'logo_field'
+			)
+		);
+	}
+
+	/**
+	 * Return saved setting
+	 * 
+	 * @param 	array 	$input 		The options posted by the user
+	 * @since 	1.2.0
+	 */
+	public static function validate_options( $input ) {
+		return $input;
+	}
+
+
+	public static function settings_field_html( $setting ) {
+		if ( 'text' == $setting['type'] ) {
+			$bbd_init_options = get_option( 'bbd_init_options' );
+			?>
+			
+			<input type='text' name='bbd_init_options[logo_field]' value='<?php if( isset( $bbd_init_options['logo_field'] ) ) echo $bbd_init_options['logo_field']; ?>' />
+
+			<p>Hello</p>
+			<?php
+		}
+	}
+
 	/*
 	* Helper Functions
 	*/
