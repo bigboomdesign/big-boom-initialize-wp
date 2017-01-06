@@ -46,7 +46,7 @@ else{
 	add_filter('login_headerurl', 'bbdi_url_login');
 
 	# Add action for function that sets the logo URL based on user selection 
-	add_action( 'login_enqueue_scripts', array( 'BBD_Init', 'bbdi_login_logo' ) );
+	add_action( 'login_head', array( 'BBD_Init', 'bbdi_login_logo' ), 100 );
 
 	# changing the alt text on the logo to show your site name 
 	function bbdi_login_title() { return "bigboomdesign.com"; }
