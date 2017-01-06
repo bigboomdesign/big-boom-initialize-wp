@@ -61,5 +61,5 @@ else{
 /* 
 * Helper Functions
 */
-function bbdi_url($s){ return plugins_url($s, __FILE__); }
-function bbdi_dir($s){ return plugin_dir_path(__FILE__) . $s; }
+function bbdi_url( $s = '' ) { return plugins_url( $s, __FILE__ ); }
+function bbdi_dir( $s = '' ) { return plugin_dir_path( __FILE__ ) . $s; }

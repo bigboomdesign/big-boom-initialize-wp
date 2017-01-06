@@ -63,14 +63,8 @@ body.login{background: none;}
 	margin-bottom:24px;
 }
 #login h1 a{
-	background: url('images/boomBack.png') no-repeat top center;
 	background-repeat:no-repeat;
 	display:block;
-	height: 472px;
-	width: 308px;
-	margin-bottom: -350px;
-	margin-left: 10px;
-	padding-bottom:15px;	
 }
 #login_error, .login .message {
 	margin:0 0 16px 8px;
