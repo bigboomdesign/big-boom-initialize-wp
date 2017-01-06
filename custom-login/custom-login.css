@@ -63,7 +63,7 @@ body.login{background: none;}
 	margin-bottom:24px;
 }
 #login h1 a{
-	background: url('images/boomBack.png') no-repeat top center !important;
+	/*background: url('images/boomBack.png') no-repeat top center !important;*/
 	background-repeat:no-repeat;
 	display:block;
 	height: 472px;

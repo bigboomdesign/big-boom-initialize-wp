@@ -12,23 +12,6 @@ jQuery(document).ready(function($){
 		clickButton(this, $, 'Working...');
 	});
 
-	// On button click, pop up the wp media library and insert the image url to the input field
-	/*$( 'button#bbd_init_logo_upload' ).on( 'click', function(e){
-
-		e.preventDefault();
-
-		var input = $( 'input#bbd_init_logo_slug' );
-
-		wp.media.editor.send.attachment = function( props, attachment ) {
-			input.val( attachment.url );
-			//console.log(props, attachment);
-			return attachment[0];
-		}
-		wp.media.editor.open( $(this) );
-		return false;
-
-	});*/
-
 	var custom_uploader;
 
 	$( 'button#bbd_init_logo_upload' ).on( 'click', function(e){

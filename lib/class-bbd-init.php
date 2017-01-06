@@ -122,6 +122,23 @@ class BBD_Init{
 		}
 	}
 
+	public static function bbdi_login_logo() {
+		$set_logo = get_option( 'bbd_init_options' );
+
+	    if( isset( $set_logo['logo_field'] ) ) {
+	        ?>
+
+			<style type="text/css">
+		        #login h1 a, .login h1 a {
+		            background-image: url(<?php echo $set_logo['logo_field']; ?>);
+		            padding-bottom: 30px;
+		        }
+	    	</style>
+
+			<?php
+	    }
+	}
+
 	/*
 	* Helper Functions
 	*/

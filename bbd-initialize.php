@@ -39,13 +39,16 @@ else{
 	}
 	add_action('login_head', 'bbdi_custom_login');
 
-	## URL link for logo
+	# URL link for logo
 	function bbdi_url_login(){
 		return "http://bigboomdesign.com/"; 
 	}
 	add_filter('login_headerurl', 'bbdi_url_login');
 
-	// changing the alt text on the logo to show your site name 
+	# Add action for function that sets the logo URL based on user selection 
+	add_action( 'login_enqueue_scripts', array( 'BBD_Init', 'bbdi_login_logo' ) );
+
+	# changing the alt text on the logo to show your site name 
 	function bbdi_login_title() { return "bigboomdesign.com"; }
 	add_filter('login_headertitle', 'bbdi_login_title');
 
