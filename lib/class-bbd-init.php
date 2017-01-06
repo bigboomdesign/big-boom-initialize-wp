@@ -129,11 +129,11 @@ class BBD_Init{
 				<?php
 				# if we have a custom logo set
 				if( isset( $set_logo['logo_field'] ) ) {
-	      ?>
-	        #login h1 a, .login h1 a {
-	            background-image: url(<?php echo $set_logo['logo_field']; ?>);
-	            padding-bottom: 30px;
-	        }
+	      		?>
+	        	#login h1 a, .login h1 a {
+		            background-image: url(<?php echo esc_url( $set_logo['logo_field'] ); ?>);
+		            padding-bottom: 30px;
+	        	}
 				<?php
 				}
 
