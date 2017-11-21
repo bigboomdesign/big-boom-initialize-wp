@@ -1,10 +1,10 @@
 === Big Boom Initialize WP ===
 Contributors:  bigboomdesign, michaelhull
 Requires at least: 3.5
-Tested up to: 4.7
+Tested up to: 4.9
 Stable tag: 1.1.1
 
-Initialize content and options for your WordPress site. 
+Initialize content and options for your WordPress site.
 
 == Description ==
 
@@ -22,7 +22,7 @@ This plugin is not suggested for sites with existing content and structure in pl
 	* Services
 	* Blog
 	* Contact
-	
+
 * Initialize Categories
 	* Catch-all is changed to `Postings` if currently set to `Uncategorized`
 	* New categories are created
@@ -45,7 +45,7 @@ This plugin is not suggested for sites with existing content and structure in pl
 	* Show on front: `page`
 	* Page on front: (uses ID of `Home` page which can be auto-generated)
 	* Page for posts: (uses ID of `Blog` page which can be auto-generated)
-	
+
 * Custom backend theme and login screen
 
 == Installation ==
